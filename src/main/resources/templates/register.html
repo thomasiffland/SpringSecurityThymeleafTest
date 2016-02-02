@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/bootstrap/3.3.6/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap.min.css}"
+          rel="stylesheet" />
+    <link href="custom.css"
+          th:href="@{custom.css}" />
+</head>
+<body>
+<div class="container">
+
+    <!-- Static navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Spring Security Thymeleaf Test</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/index">Index</a></li>
+                    <li class="active"><a href="/register">Register</a></li>
+                </ul>
+                <div th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')} : ${false}">
+                    <div th:case="${false}">
+                        <form name="f" class="navbar-form navbar-right" th:action="@{/login}" method="post">
+                            <div class="form-group">
+                                <input type="text" name="username" id="username" placeholder="Username" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="password" id="password" placeholder="Password" class="form-control" />
+                            </div>
+                            <button type="submit" class="btn btn-success">Sign in</button>
+                        </form>
+                    </div>
+                    <div th:case="${true}">
+                        <form name="f" class="navbar-form navbar-right" th:action="@{/logout}" method="post">
+                            <button type="submit" class="btn btn-danger">Logout</button>
+                        </form>
+                    </div>
+                    <span th:case="*">Should never happen, but who knows...</span>
+                </div>
+
+            </div><!--/.nav-collapse -->
+
+        </div><!--/.container-fluid -->
+    </nav>
+
+</div> <!-- /container -->
+
+<div style="height:100px;"></div>
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+<form class="form-horizontal" th:action="@{/register}" th:object="${user}" method="post">
+    <fieldset>
+
+        <!-- Form Name -->
+        <legend>Registrierung</legend>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="username">Username</label>
+            <div class="col-md-4">
+                <input id="username" name="username" type="text" placeholder="Username" class="form-control input-md"  th:field="*{username}" />
+                <td th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username muss zwischen 2 und 30 Zeichen haben</td>
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="email">Email-Adresse</label>
+            <div class="col-md-4">
+                <input id="email" name="email" type="text" placeholder="email@mail.de" class="form-control input-md"  th:field="*{email}"/>
+                <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Keine valide Email angegeben</td>
+            </div>
+        </div>
+
+        <!-- Password input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="password">Passwort</label>
+            <div class="col-md-4">
+                <input id="password" name="password" type="password" placeholder="Password" class="form-control input-md" th:field="*{password}" />
+                <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Das Passwort muss mindestens 8 Zeichen haben.</td>
+            </div>
+        </div>
+
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="register"></label>
+            <div class="col-md-4">
+                <button id="register" name="register" class="btn btn-info">Registrieren</button>
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+    </div>
+</div>
+
+
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"
+        th:src="@{/webjars/jquery/2.2.0/jquery.js}"></script>
+<script src="https://cdn.jsdelivr.net/bootstrap/3.3.6/js/bootstrap.min.js"
+      th:src="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"
+       />
+
+</body>
+</html>
